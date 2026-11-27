@@ -1,8 +1,0 @@
-1. core/key_derivation.py:
-converts a password into a 256 bit encryption key using scrypt (makes password guessing computationally expensive)
-
-2. core/file_format.py:
-decides the consistent factor for encrypted files
-
-3. core/crypto_engine.py:
-connects the two modules and AES-256-GCM actually encrypts and decrypts the data

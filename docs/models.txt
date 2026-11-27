@@ -1,0 +1,37 @@
+========================================
+1. vault_file.py
+========================================
+
+PURPOSE:
+Defines the VaultFile data model.
+
+This model represents an encrypted file registered
+in the SecureVault database.
+
+ATTRIBUTES:
+
+- original_name:
+  The name of the original file.
+
+- encrypted_path:
+  The location of the encrypted file.
+
+- file_size:
+  The size of the encrypted file in bytes.
+
+- created_at:
+  The date and time the file was registered.
+
+- id:
+  The unique database identifier. Assigned by SQLite.
+
+- algorithm:
+  The encryption algorithm used. Defaults to AES-256-GCM.
+
+- format_version:
+  The SecureVault file format version. Defaults to 1.
+
+IMPORTANT:
+This class only stores file metadata.
+It does not perform encryption, decryption,
+or database operations.

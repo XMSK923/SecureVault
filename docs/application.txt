@@ -1,0 +1,47 @@
+
+application/file_service.py
+
+PURPOSE:
+Handles interactions between SecureVault's cryptographic
+engine and the local filesystem.
+
+MAIN RESPONSIBILITIES:
+
+1. Encrypt actual files.
+2. Decrypt SecureVault encrypted files.
+3. Read files from their original locations.
+4. Save encrypted and decrypted output.
+5. Prevent accidental overwriting.
+6. Validate file paths and passwords.
+7. Handle filesystem errors.
+
+MAIN FUNCTIONS:
+
+encrypt_file(input_path, password, output_path=None)
+
+- Receives an original file and password.
+- Reads the file contents as bytes.
+- Passes the data to encrypt_bytes().
+- Saves the encrypted result as a .svault file.
+- Returns the output path.
+
+decrypt_file(input_path, password, output_path=None)
+
+- Receives a .svault file and password.
+- Reads the encrypted contents.
+- Passes them to decrypt_bytes().
+- Saves the recovered original data.
+- Returns the output path.
+
+DEPENDENCIES:
+
+- pathlib: File and directory path handling.
+- core.crypto_engine: Encryption and decryption operations.
+
+IMPORTANT NOTES:
+
+- Original files are preserved.
+- Existing output files are never overwritten.
+- Decryption authentication happens before output is written.
+- The current implementation reads the entire file into memory.
+- Large-file support requires a future streaming encryption design.

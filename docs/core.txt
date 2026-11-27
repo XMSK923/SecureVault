@@ -1,0 +1,80 @@
+
+FILE: core/key_derivation.py
+
+PURPOSE:
+Converts user passwords into cryptographic encryption keys.
+
+MAIN FUNCTIONS:
+
+generate_salt()
+- Generates a random 16-byte salt.
+
+derive_key(password, salt)
+- Uses Scrypt to derive a 32-byte key.
+- Validates the password and salt.
+
+TECHNOLOGY:
+- Scrypt KDF
+- OS cryptographically secure random generator
+
+DEPENDENCIES:
+- os
+- cryptography
+  
+==========================================================================
+
+
+FILE: core/file_format.py
+
+PURPOSE:
+Defines and validates the structure of SecureVault files.
+
+MAIN COMPONENTS:
+
+FileHeader
+- Represents encrypted-file metadata.
+- Stores version, Scrypt parameters, salt and nonce.
+- Converts metadata into bytes.
+
+parse_header(data)
+- Validates the file identifier.
+- Checks the supported format version.
+- Checks supported Scrypt parameters.
+- Extracts the salt and nonce.
+
+IMPORTANT CONSTANTS:
+- MAGIC: SecureVault file identifier.
+- VERSION: Current file format version.
+- HEADER_SIZE: Total header size.
+  
+======================================================================
+
+
+FILE: core/crypto_engine.py
+
+PURPOSE:
+Performs the actual encryption and decryption operations.
+
+MAIN FUNCTIONS:
+
+encrypt_bytes(data, password)
+- Generates a random salt and nonce.
+- Derives an encryption key using Scrypt.
+- Encrypts data using AES-256-GCM.
+- Returns the header and encrypted content.
+
+decrypt_bytes(encrypted_file, password)
+- Parses and validates the header.
+- Derives the encryption key.
+- Authenticates and decrypts the content.
+- Rejects invalid passwords or modified data.
+
+TECHNOLOGY:
+- AES-256-GCM
+- Scrypt
+
+IMPORTANT:
+The authentication tag is generated and checked
+by AES-GCM.
+  
+===================================================================
