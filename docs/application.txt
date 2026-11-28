@@ -1,5 +1,5 @@
 
-application/file_service.py
+1.application/file_service.py
 
 PURPOSE:
 Handles interactions between SecureVault's cryptographic
@@ -45,3 +45,49 @@ IMPORTANT NOTES:
 - Decryption authentication happens before output is written.
 - The current implementation reads the entire file into memory.
 - Large-file support requires a future streaming encryption design.
+
+========================================
+2. vault_service.py
+========================================
+
+PURPOSE:
+Provides application-level operations for managing
+files registered in the Aegis vault.
+
+CLASS:
+VaultService
+
+DEPENDENCIES:
+- VaultRepository
+- VaultFile
+
+METHODS:
+
+1. register_file(encrypted_path, original_name)
+   Registers an existing encrypted file in the database.
+
+   Checks that the selected path exists and is a file.
+   Determines the original filename if not provided.
+   Collects file size and registration date.
+   Creates a VaultFile object and passes it to the repository.
+
+2. get_file(file_id)
+   Retrieves a specific vault record by its ID.
+
+3. list_files()
+   Retrieves all registered vault records.
+
+4. remove_file(file_id)
+   Removes a database record without deleting the
+   actual encrypted file.
+
+IMPORTANT:
+VaultService coordinates application operations.
+It does not perform encryption or decryption.
+
+Registering a file does not verify its password
+or authenticate its encrypted contents. It registers
+metadata about an existing file.
+
+The service does not delete encrypted files when
+removing their database records.

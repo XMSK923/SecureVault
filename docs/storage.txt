@@ -1,0 +1,104 @@
+========================================
+1. database.py
+========================================
+
+PURPOSE:
+Manages the Aegis SQLite database.
+
+The database stores metadata about encrypted files
+registered in the vault.
+
+CLASS:
+Database
+
+RESPONSIBILITIES:
+
+1. Database location:
+   Determines where the database file is stored.
+   Uses the Windows Local AppData directory by default.
+   Supports a custom path for testing.
+
+2. Connection management:
+   Opens SQLite connections.
+   Commits successful operations.
+   Rolls back failed operations.
+   Closes connections safely.
+
+3. Database initialization:
+   Creates the database directory if necessary.
+   Creates the vault_files table if it doesn't exist.
+
+TABLE: vault_files
+
+- id:
+  Unique database record ID.
+
+- original_name:
+  Original filename.
+
+- encrypted_path:
+  Location of the encrypted file.
+  Must be unique.
+
+- file_size:
+  Encrypted file size in bytes.
+
+- created_at:
+  Date and time the record was created.
+
+- algorithm:
+  Encryption algorithm. Defaults to AES-256-GCM.
+
+- format_version:
+  Aegis file format version. Defaults to 1.
+
+IMPORTANT:
+The database stores metadata only.
+It does not store passwords, encryption keys,
+or decrypted file contents.
+
+The database does not delete encrypted files.
+
+========================================
+2. vault_repository.py
+========================================
+
+PURPOSE:
+Manages vault file records stored in the SQLite database.
+
+CLASS:
+VaultRepository
+
+DEPENDENCIES:
+- Database
+- VaultFile
+
+METHODS:
+
+1. add_file(file)
+   Inserts a new vault file record into the database.
+   Returns a VaultFile object containing its generated ID.
+
+2. get_file(file_id)
+   Retrieves a specific vault record using its ID.
+   Returns a VaultFile object or None if not found.
+
+3. list_files()
+   Retrieves all registered vault records.
+   Returns a list of VaultFile objects.
+
+4. remove_file(file_id)
+   Removes a vault record using its ID.
+   Returns True if a record was removed, otherwise False.
+
+5. _row_to_vault_file(row)
+   Converts an SQLite database row into a VaultFile object.
+   This is an internal helper method.
+
+IMPORTANT:
+The repository manages database records only.
+
+Removing a record does NOT delete the actual encrypted file.
+
+Passwords, encryption keys, and decrypted file contents
+are never stored by this repository.
